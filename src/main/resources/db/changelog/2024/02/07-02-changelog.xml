@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="1744349420-1" author="javierfn">
+        <createSequence incrementBy="1" sequenceName="OFFER_ID_SEQ" startValue="41"/>
+        <rollback>
+            <dropSequence sequenceName="OFFER_ID_SEQ"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1744349420-2" author="javierfn">
+        <createTable tableName="OFFER" tablespace="DATA">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="OFFER_PK" primaryKeyTablespace="INDEX" notNullConstraintName="OFFER_ID_NN"/>
+            </column>
+            <column name="VALID_FROM" type="DATETIME">
+                <constraints nullable="false" notNullConstraintName="OFFER_VALID_FROM_NN"/>
+            </column>
+            <column name="PRICE" type="VARCHAR(100)">
+                <constraints nullable="false" notNullConstraintName="OFFER_PRICE_NN"/>
+            </column>
+            <column name="PRODUCT_ID" type="BIGINT">
+                <constraints nullable="false" notNullConstraintName="OFFER_PRODUCT_ID_NN"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="OFFER"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1744349420-3" author="javierfn">
+        <addForeignKeyConstraint baseColumnNames="PRODUCT_ID" baseTableName="OFFER"
+                                 constraintName="OFFER_PRODUCT_FK" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="ID" referencedTableName="PRODUCT"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="OFFER" constraintName="OFFER_PRODUCT_FK"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

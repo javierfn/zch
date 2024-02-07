@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="1744382700-1" author="javierfn">
+        <createSequence incrementBy="1" sequenceName="SIZE_ID_SEQ" startValue="21"/>
+        <rollback>
+            <dropSequence sequenceName="SIZE_ID_SEQ"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1744382700-2" author="javierfn">
+        <createTable tableName="SIZE" tablespace="DATA">
+            <column name="SIZE_ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SIZE_PK" primaryKeyTablespace="INDEX" notNullConstraintName="SIZE_SIZE_ID_NN"/>
+            </column>
+            <column name="SIZE" type="VARCHAR(5)">
+                <constraints nullable="false" notNullConstraintName="SIZE_SIZE_NN"/>
+            </column>
+            <column name="AVAILABILITY" type="BOOLEAN">
+                <constraints nullable="false" notNullConstraintName="SIZE_AVAILABILITY_NN"/>
+            </column>
+            <column name="LAST_UPDATED" type="DATETIME">
+                <constraints nullable="false" notNullConstraintName="SIZE_LAST_UPDATED_NN"/>
+            </column>
+            <column name="PRODUCT_ID" type="BIGINT">
+                <constraints nullable="false" notNullConstraintName="SIZE_PRODUCT_ID_NN"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="SIZE"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1744382700-3" author="javierfn">
+        <addForeignKeyConstraint baseColumnNames="PRODUCT_ID" baseTableName="SIZE"
+                                 constraintName="SIZE_PRODUCT_FK" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="ID" referencedTableName="PRODUCT"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="SIZE" constraintName="SIZE_PRODUCT_FK"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
