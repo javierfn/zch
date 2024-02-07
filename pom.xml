@@ -3,16 +3,28 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.hackerrank.prueba</groupId>
-	<artifactId>backendev</artifactId>
-	<version>1.0</version>
-	<name>Test for access</name>
+	<groupId>com.inditex</groupId>
+	<artifactId>zarachallenge</artifactId>
+	<version>0.1.0</version>
+	<name>Zara challenge</name>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.0</version>
+		<version>3.2.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+
+	<properties>
+		<maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<openapi-generator-maven-plugin.version>7.2.0</openapi-generator-maven-plugin.version>
+		<springdoc-openapi.version>1.7.0</springdoc-openapi.version>
+		<springdoc-openapi-starter-webmvc-ui.version>2.3.0</springdoc-openapi-starter-webmvc-ui.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -83,7 +95,25 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!--- Dependencys for solution -->	
+		<!--- Dependencys for solution -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc-openapi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -95,6 +125,51 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/similarProducts.yaml</inputSpec>
+							<apiPackage>${project.groupId}.${project.artifactId}.controller</apiPackage>
+							<modelPackage>${project.groupId}.${project.artifactId}.domain.model</modelPackage>
+							<invokerPackage>${project.groupId}.${project.artifactId}.infrastructure.invoker</invokerPackage>
+							<skipValidateSpec>false</skipValidateSpec>
+							<generateSupportingFiles>false</generateSupportingFiles>
+							<output>${project.basedir}</output>
+							<generatorName>spring</generatorName>
+							<library>spring-boot</library>
+							<modelNameSuffix>DTO</modelNameSuffix>
+							<apiNameSuffix>ControllerInterface</apiNameSuffix>
+							<configOptions>
+								<useSpringBoot3>true</useSpringBoot3>
+								<useSpringController>no</useSpringController>
+								<java8>true</java8>
+								<dateLibrary>java8</dateLibrary>
+								<openApiNullable>false</openApiNullable>
+								<interfaceOnly>true</interfaceOnly>
+								<skipDefaultInterface>true</skipDefaultInterface>
+								<sourceFolder>src/main/java</sourceFolder>
+								<useTags>true</useTags>
+								<useSwaggerUI>no</useSwaggerUI>
+								<swaggerDocketConfig>no</swaggerDocketConfig>
+								<useOptional>true</useOptional>
+								<returnSuccessCode>true</returnSuccessCode>
+								<hideGenerationTimestamp>true</hideGenerationTimestamp>
+								<additionalModelTypeAnnotations>
+									@lombok.Builder(toBuilder = true)
+									@lombok.With
+								</additionalModelTypeAnnotations>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

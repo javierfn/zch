@@ -4,9 +4,16 @@ info:
   version: '1.0'
 servers:
   - url: 'http://localhost:8080'
+
+tags:
+  - name: similar
+    description: Operations about similar products
+
 paths:
   '/product/{productId}/similar':
     get:
+      tags:
+        - similar
       parameters:
         - name: productId
           in: path
