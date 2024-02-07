@@ -5,7 +5,7 @@
  */
 package com.inditex.zarachallenge.controller;
 
-import com.inditex.zarachallenge.domain.model.ProductDetailDTO;
+import com.inditex.zarachallenge.infrastructure.dto.ProductDetailDTO;
 import java.util.Set;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;

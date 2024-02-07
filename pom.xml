@@ -131,13 +131,14 @@
 				<version>${openapi-generator-maven-plugin.version}</version>
 				<executions>
 					<execution>
+						<id>generate-controller-interface</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<inputSpec>${project.basedir}/src/main/resources/similarProducts.yaml</inputSpec>
 							<apiPackage>${project.groupId}.${project.artifactId}.controller</apiPackage>
-							<modelPackage>${project.groupId}.${project.artifactId}.domain.model</modelPackage>
+							<modelPackage>${project.groupId}.${project.artifactId}.infrastructure.dto</modelPackage>
 							<invokerPackage>${project.groupId}.${project.artifactId}.infrastructure.invoker</invokerPackage>
 							<skipValidateSpec>false</skipValidateSpec>
 							<generateSupportingFiles>false</generateSupportingFiles>
@@ -165,6 +166,37 @@
 									@lombok.Builder(toBuilder = true)
 									@lombok.With
 								</additionalModelTypeAnnotations>
+								<generateTests>false</generateTests>
+							</configOptions>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-cliente-rest-template</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/similarProductEngineAPI.yaml</inputSpec>
+							<apiPackage>${project.groupId}.${project.artifactId}.infrastructure.rest.similarProductEngineAPI.client</apiPackage>
+							<modelPackage>${project.groupId}.${project.artifactId}.infrastructure.rest.similarProductEngineAPI.model</modelPackage>
+							<invokerPackage>${project.groupId}.${project.artifactId}.infrastructure.rest.similarProductEngineAPI.invoker</invokerPackage>
+                            <output>${project.basedir}</output>
+                            <skipValidateSpec>true</skipValidateSpec>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+							<supportingFilesToGenerate>ApiClient.java,JavaTimeFormatter.java,Authentication.java,RFC3339DateFormat.java</supportingFilesToGenerate>
+                            <generatorName>java</generatorName>
+                            <library>resttemplate</library>
+							<apiNameSuffix>ClientApi</apiNameSuffix>
+							<configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                                <openApiNullable>false</openApiNullable>
+								<java8>true</java8>
+								<dateLibrary>java8</dateLibrary>
+								<useTags>true</useTags>
+								<hideGenerationTimestamp>true</hideGenerationTimestamp>
+								<useJakartaEe>true</useJakartaEe>
+								<delegatePattern>true</delegatePattern>
+								<generateTests>false</generateTests>
 							</configOptions>
 						</configuration>
 					</execution>
