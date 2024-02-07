@@ -230,3 +230,5 @@ runnerStop.sh
 src/test/java/com/inditex/zarachallenge/http/HttpJsonDynamicUnitTest.java
 src/test/resources/testcases/http00.json
 #### Added by HackerRank ####
+/.idea/compiler.xml
+/.idea/jarRepositories.xml
