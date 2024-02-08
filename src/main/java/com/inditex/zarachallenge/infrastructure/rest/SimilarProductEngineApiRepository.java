@@ -14,7 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @Transactional
-public class SimilarProductEngineApiAdapterImpl implements SimilarProductEngineApiAdapter {
+public class SimilarProductEngineApiRepository
+    implements com.inditex.zarachallenge.domain.repository.SimilarProductEngineApiRepository {
 
   private static final String
       ERROR_AL_CONSULTAR_LA_API_DE_PRODUCTOS_SIMILARES_PARA_EL_ID_DE_PRODUCTO =
@@ -22,11 +23,11 @@ public class SimilarProductEngineApiAdapterImpl implements SimilarProductEngineA
 
   private final DefaultClientApi similarProductEngineClientApi;
 
-  public SimilarProductEngineApiAdapterImpl() {
+  public SimilarProductEngineApiRepository() {
     this.similarProductEngineClientApi = new DefaultClientApi();
   }
 
-  public SimilarProductEngineApiAdapterImpl(DefaultClientApi similarProductEngineClientApi) {
+  public SimilarProductEngineApiRepository(DefaultClientApi similarProductEngineClientApi) {
     this.similarProductEngineClientApi = similarProductEngineClientApi;
   }
 

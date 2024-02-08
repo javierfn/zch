@@ -29,27 +29,28 @@ import io.qameta.allure.Story;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @Epic("Similar product management")
-class SimilarProductEngineApiAdapterTest {
+class SimilarProductEngineApiRepositoryTest {
 
     EasyRandom generator;
 
     @Mock
     DefaultClientApi similarProductEngineClientApi;
 
-    SimilarProductEngineApiAdapterImpl similarProductEngineApiAdapter;
+    SimilarProductEngineApiRepository similarProductEngineApiAdapter;
 
     @BeforeEach
     void setup() {
         generator = new EasyRandom();
 
         similarProductEngineApiAdapter =
-            new SimilarProductEngineApiAdapterImpl(similarProductEngineClientApi);
+            new SimilarProductEngineApiRepository(similarProductEngineClientApi);
     }
 
     @Test
     @Feature("Find similar products in api")
     @Story("Shall return error")
     void should_throw_null_pointer_exception_when_find_similar_products_by_product_id_and_product_id_is_null() {
+        //noinspection DataFlowIssue
         assertThrows(NullPointerException.class,
             () -> similarProductEngineApiAdapter.findSimilarProductsByProductId(null),
             "Should throw null pointer exception");

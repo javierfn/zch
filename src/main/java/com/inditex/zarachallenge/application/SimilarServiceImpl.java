@@ -1,12 +1,15 @@
 package com.inditex.zarachallenge.application;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.inditex.zarachallenge.domain.model.ProductDetail;
-import com.inditex.zarachallenge.domain.repository.SimilarRepository;
-import com.inditex.zarachallenge.infrastructure.rest.SimilarProductEngineApiAdapter;
+import com.inditex.zarachallenge.domain.repository.SimilarProductEngineApiRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,16 +19,24 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 public class SimilarServiceImpl implements SimilarService {
 
-	private final SimilarRepository similarRepository;
+	private final ProductService productService;
 
-	private final SimilarProductEngineApiAdapter similarProductEngineApiAdapter;
+	private final SimilarProductEngineApiRepository similarProductEngineApiRepository;
 
+	@Override
 	public List<ProductDetail> findSimilarProductsByProductId (Long productId) {
 
-		var product = similarRepository.findProductById(productId);
+		productService.findProductById(productId);
 
-		var offer = similarRepository.findOfferByProductId(productId, LocalDateTime.now());
+		var similarProductIdList = similarProductEngineApiRepository.findSimilarProductsByProductId(productId);
 
+		var result = new ArrayList<ProductDetail>();
+
+		similarProductIdList.forEach(similarProductId -> {
+			Optional.ofNullable(productService.getProductDetailByProductId(similarProductId)).map(result::add);
+		});
+
+		return result;
 	}
 
 }
