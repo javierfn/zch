@@ -24,6 +24,9 @@
 		<springdoc-openapi.version>1.7.0</springdoc-openapi.version>
 		<springdoc-openapi-starter-webmvc-ui.version>2.3.0</springdoc-openapi-starter-webmvc-ui.version>
 		<liquibase.version>4.25.1</liquibase.version>
+		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<easy.random.version>5.0.0</easy.random.version>
+		<allure-junit5.version>2.25.0</allure-junit5.version>
 	</properties>
 
 	<dependencies>
@@ -114,6 +117,36 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${mapstruct.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${mapstruct.version}</version>
+			<scope>provided</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jeasy</groupId>
+			<artifactId>easy-random-core</artifactId>
+			<version>${easy.random.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.qameta.allure</groupId>
+			<artifactId>allure-junit5</artifactId>
+			<version>${allure-junit5.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
