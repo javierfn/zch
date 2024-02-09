@@ -3,8 +3,8 @@ package com.inditex.zarachallenge.application;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,34 +12,25 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.stream.Collectors;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.inditex.zarachallenge.domain.exception.OfferNotFoundException;
 import com.inditex.zarachallenge.domain.exception.ProductNotFoundException;
 import com.inditex.zarachallenge.domain.exception.SizeNotFoundException;
 import com.inditex.zarachallenge.domain.model.Offer;
 import com.inditex.zarachallenge.domain.model.Product;
-import com.inditex.zarachallenge.domain.model.ProductDetail;
+import com.inditex.zarachallenge.domain.model.Size;
 import com.inditex.zarachallenge.domain.repository.OfferRepository;
 import com.inditex.zarachallenge.domain.repository.ProductRepository;
 import com.inditex.zarachallenge.domain.repository.SizeRepository;
-import com.inditex.zarachallenge.infrastructure.mappers.OfferMapper;
-import com.inditex.zarachallenge.infrastructure.persistance.OfferRepositoryAdapter;
-import com.inditex.zarachallenge.infrastructure.persistance.OfferRepositoryJpa;
-import com.inditex.zarachallenge.infrastructure.persistance.ProductRepositoryJpa;
-import com.inditex.zarachallenge.infrastructure.persistance.SizeRepositoryAdapter;
-import com.inditex.zarachallenge.infrastructure.persistance.entity.OfferEntity;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -89,6 +80,7 @@ class ProductServiceTest {
     @Feature("Find product details")
     @Story("Shall return error")
     void should_throw_null_pointer_exception_when_get_product_detail_by_product_id_and_product_id_is_null() {
+        //noinspection DataFlowIssue
         assertThrows(NullPointerException.class,
             () -> productService.getProductDetailByProductId(null),
             "Should throw null pointer exception");
@@ -154,6 +146,120 @@ class ProductServiceTest {
 
         assertNotNull(result, "Result should be not null");
         assertTrue(result.isEmpty(), "Result should be empty");
+    }
+
+    @Test
+    @Feature("Find product details")
+    @Story("Shall return product detail data")
+    void should_return_optional_empty_when_get_product_detail_by_product_id_and_offer_price_is_a_not_valid_string_number() {
+
+        var productId = 1L;
+
+        var product = generator.nextObject(Product.class);
+        product.setId(productId);
+
+        var offer = generator.nextObject(Offer.class);
+        offer.setProductId(productId);
+        offer.setPrice("priceError");
+
+        var sizeList = generator.objects(Size.class,5).collect(Collectors.toList());
+        sizeList.forEach(size -> {
+            size.setProductId(productId);
+            size.setAvailability(Boolean.FALSE);
+        });
+
+        when(productRepository.findProductById(anyLong()))
+            .thenReturn(product);
+        when(offerRepository.findOfferByProductId(anyLong(), any(LocalDateTime.class)))
+            .thenReturn(offer);
+        when(sizeRepository.findSizeAvailableByProductId(anyLong())).thenReturn(sizeList);
+
+        var result = productService.getProductDetailByProductId(productId);
+
+        assertNotNull(result, "Result should be not null");
+        assertTrue(result.isEmpty(), "Result should be empty");
+    }
+
+    @Test
+    @Feature("Find product details")
+    @Story("Shall return product detail data")
+    void should_return_product_detail_data_when_get_product_detail_by_product_id_and_there_are_not_availability() {
+
+        var productId = 1L;
+
+        var product = generator.nextObject(Product.class);
+        product.setId(productId);
+
+        var offer = generator.nextObject(Offer.class);
+        offer.setProductId(productId);
+        offer.setPrice("200.0");
+
+        var sizeList = generator.objects(Size.class,5).collect(Collectors.toList());
+        sizeList.forEach(size -> {
+            size.setProductId(productId);
+            size.setAvailability(Boolean.FALSE);
+        });
+
+        when(productRepository.findProductById(anyLong()))
+            .thenReturn(product);
+        when(offerRepository.findOfferByProductId(anyLong(), any(LocalDateTime.class)))
+            .thenReturn(offer);
+        when(sizeRepository.findSizeAvailableByProductId(anyLong())).thenReturn(sizeList);
+
+        var result = productService.getProductDetailByProductId(productId);
+
+        assertNotNull(result, "Result should be not null");
+        assertFalse(result.isEmpty(), "Result should be not empty");
+
+        var resultProductDetail = result.get();
+
+        assertAll(
+            () -> assertEquals(productId, resultProductDetail.getId(), "Id should be equals"),
+            () -> assertEquals(product.getName(), resultProductDetail.getName(), "Name should be equals"),
+            () -> assertEquals(offer.getPrice(), resultProductDetail.getPrice().toString(), "Price should be equals"),
+            () -> assertEquals(Boolean.FALSE, resultProductDetail.getAvailability(), "Availability should be false")
+        );
+    }
+
+    @Test
+    @Feature("Find product details")
+    @Story("Shall return product detail data")
+    void should_return_product_detail_data_when_get_product_detail_by_product_id_and_there_are_availability() {
+
+        var productId = 1L;
+
+        var product = generator.nextObject(Product.class);
+        product.setId(productId);
+
+        var offer = generator.nextObject(Offer.class);
+        offer.setProductId(productId);
+        offer.setPrice("200.0");
+
+        var sizeList = generator.objects(Size.class,5).collect(Collectors.toList());
+        sizeList.forEach(size -> {
+            size.setProductId(productId);
+            size.setAvailability(Boolean.TRUE);
+        });
+
+        when(productRepository.findProductById(anyLong()))
+            .thenReturn(product);
+        when(offerRepository.findOfferByProductId(anyLong(), any(LocalDateTime.class)))
+            .thenReturn(offer);
+        when(sizeRepository.findSizeAvailableByProductId(anyLong())).thenReturn(sizeList);
+
+        var result = productService.getProductDetailByProductId(productId);
+
+        assertNotNull(result, "Result should be not null");
+        assertFalse(result.isEmpty(), "Result should be not empty");
+
+        var resultProductDetail = result.get();
+
+        assertAll(
+            () -> assertEquals(productId, resultProductDetail.getId(), "Id should be equals"),
+            () -> assertEquals(product.getName(), resultProductDetail.getName(), "Name should be equals"),
+            () -> assertEquals(offer.getPrice(), resultProductDetail.getPrice().toString(), "Price should be equals"),
+            () -> assertEquals(Boolean.TRUE, resultProductDetail.getAvailability(), "Availability should be true")
+        );
     }
 
 }

@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
 									.isEmpty();
 
 			var productDetail = ProductDetail.builder()
-								.id(String.valueOf(product.getId()))
+								.id(productId)
 								.name(product.getName())
 								.price(BigDecimal.valueOf(Double.valueOf(offer.getPrice())))
 								.availability(availability)

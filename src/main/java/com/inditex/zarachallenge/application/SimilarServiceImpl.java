@@ -33,7 +33,7 @@ public class SimilarServiceImpl implements SimilarService {
 		var result = new ArrayList<ProductDetail>();
 
 		similarProductIdList.forEach(similarProductId -> {
-			Optional.ofNullable(productService.getProductDetailByProductId(similarProductId)).map(result::add);
+			productService.getProductDetailByProductId(similarProductId).map(result::add);
 		});
 
 		return result;
