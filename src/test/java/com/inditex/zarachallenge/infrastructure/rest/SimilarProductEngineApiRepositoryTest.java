@@ -20,6 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
+import com.inditex.zarachallenge.domain.exception.SimilarProductsConnectionErrorException;
 import com.inditex.zarachallenge.domain.exception.SimilarProductsErrorException;
 import com.inditex.zarachallenge.infrastructure.rest.similarProductEngineAPI.client.DefaultClientApi;
 import io.qameta.allure.Epic;
@@ -54,6 +56,21 @@ class SimilarProductEngineApiRepositoryTest {
         assertThrows(NullPointerException.class,
             () -> similarProductEngineApiAdapter.findSimilarProductsByProductId(null),
             "Should throw null pointer exception");
+    }
+
+    @Test
+    @Feature("Find similar products in api")
+    @Story("Shall return error")
+    void should_throw_similar_products_connection_error_exception_when_find_similar_products_by_product_id_and_api_throw_rest_client_exception() {
+
+        var productId = 1L;
+
+        when(similarProductEngineClientApi.getProductSimilaridsWithHttpInfo(anyString()))
+            .thenThrow(new RestClientException("Error test message"));
+
+        assertThrows(SimilarProductsConnectionErrorException.class,
+            () -> similarProductEngineApiAdapter.findSimilarProductsByProductId(productId),
+            "Should throw similar products connection error exception");
     }
 
     @Test
@@ -128,7 +145,7 @@ class SimilarProductEngineApiRepositoryTest {
 
         assertNotNull(result, "The result should not be null");
         assertFalse(result.isEmpty(), "Result should be not empty");
-        assertEquals(2L, result.size(), "Result size should be 3");
+        assertEquals(3L, result.size(), "Result size should be 3");
         assertEquals(1L, result.get(0), "Result index 0 should equals");
         assertEquals(2L, result.get(1), "Result index 1 should equals");
         assertEquals(3L, result.get(2), "Result index 2 should equals");

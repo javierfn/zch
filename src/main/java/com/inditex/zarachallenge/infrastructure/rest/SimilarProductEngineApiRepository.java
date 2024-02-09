@@ -3,9 +3,12 @@ package com.inditex.zarachallenge.infrastructure.rest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.mockserver.model.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import com.inditex.zarachallenge.domain.exception.SimilarProductsConnectionErrorException;
 import com.inditex.zarachallenge.domain.exception.SimilarProductsErrorException;
 import com.inditex.zarachallenge.infrastructure.rest.similarProductEngineAPI.client.DefaultClientApi;
 import lombok.NonNull;
@@ -27,25 +30,41 @@ public class SimilarProductEngineApiRepository
     this.similarProductEngineClientApi = new DefaultClientApi();
   }
 
-  public SimilarProductEngineApiRepository(DefaultClientApi similarProductEngineClientApi) {
+  public SimilarProductEngineApiRepository(final DefaultClientApi similarProductEngineClientApi) {
     this.similarProductEngineClientApi = similarProductEngineClientApi;
   }
 
   @Override
   public List<Long> findSimilarProductsByProductId(@NonNull final Long productId) {
 
-    var response = Optional.ofNullable(
-            similarProductEngineClientApi.getProductSimilaridsWithHttpInfo(String.valueOf(productId)))
-        .orElseThrow( () -> {
-          log.error(
-              ERROR_AL_CONSULTAR_LA_API_DE_PRODUCTOS_SIMILARES_PARA_EL_ID_DE_PRODUCTO,
-              productId);
-          log.error("La API responde null");;
+    ResponseEntity<Set<String>> response;
+    try {
 
-          throw new SimilarProductsErrorException();
-        });
+      response = similarProductEngineClientApi
+          .getProductSimilaridsWithHttpInfo(String.valueOf(productId));
 
-    if ( ! (HttpStatusCode.OK_200.equals(response.getStatusCode()))) {
+    } catch (Exception e) {
+
+      log.error(
+          ERROR_AL_CONSULTAR_LA_API_DE_PRODUCTOS_SIMILARES_PARA_EL_ID_DE_PRODUCTO,
+          productId);
+
+      log.error("Exception message: {}", e.getMessage());
+      log.error("Exception: ",e);
+
+      throw new SimilarProductsConnectionErrorException();
+    }
+
+    if ( response == null ) {
+      log.error(
+          ERROR_AL_CONSULTAR_LA_API_DE_PRODUCTOS_SIMILARES_PARA_EL_ID_DE_PRODUCTO,
+          productId);
+      log.error("Similar products API responde null");;
+
+      throw new SimilarProductsErrorException();
+    }
+
+    if ( ! (HttpStatusCode.OK_200.code() == response.getStatusCode().value()) ) {
 
       log.error(
           ERROR_AL_CONSULTAR_LA_API_DE_PRODUCTOS_SIMILARES_PARA_EL_ID_DE_PRODUCTO,
