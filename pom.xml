@@ -221,6 +221,7 @@
                             <generatorName>java</generatorName>
                             <library>resttemplate</library>
 							<apiNameSuffix>ClientApi</apiNameSuffix>
+							<generateApiTests>false</generateApiTests>
 							<configOptions>
                                 <dateLibrary>java8</dateLibrary>
                                 <openApiNullable>false</openApiNullable>
@@ -230,7 +231,6 @@
 								<hideGenerationTimestamp>true</hideGenerationTimestamp>
 								<useJakartaEe>true</useJakartaEe>
 								<delegatePattern>true</delegatePattern>
-								<generateTests>false</generateTests>
 							</configOptions>
 						</configuration>
 					</execution>
