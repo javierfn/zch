@@ -1,5 +1,6 @@
 package com.inditex.zarachallenge.domain.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +21,10 @@ public class Offer {
 
   private LocalDateTime validFrom;
 
-  private String price;
+  private BigDecimal price;
 
   private Long productId;
+
+  private Product product;
 
 }

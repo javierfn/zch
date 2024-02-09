@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 			var productDetail = ProductDetail.builder()
 								.id(productId)
 								.name(product.getName())
-								.price(BigDecimal.valueOf(Double.valueOf(offer.getPrice())))
+								.price(offer.getPrice())
 								.availability(availability)
 								.build();
 

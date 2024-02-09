@@ -1,6 +1,7 @@
 package com.inditex.zarachallenge.infrastructure.persistance.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.GenericGenerator;
 import jakarta.persistence.Column;
@@ -40,7 +41,7 @@ public class OfferEntity implements Serializable {
   private LocalDateTime validFrom;
 
   @Column(name = "PRICE", nullable = false)
-  private String price;
+  private BigDecimal price;
 
   @Column(name = "PRODUCT_ID", nullable = false)
   private Long productId;

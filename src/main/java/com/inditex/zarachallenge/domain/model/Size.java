@@ -26,4 +26,6 @@ public class Size {
 
   private Long productId;
 
+  private Product product;
+
 }

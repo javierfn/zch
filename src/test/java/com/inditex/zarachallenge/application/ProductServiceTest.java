@@ -151,38 +151,6 @@ class ProductServiceTest {
     @Test
     @Feature("Find product details")
     @Story("Shall return product detail data")
-    void should_return_optional_empty_when_get_product_detail_by_product_id_and_offer_price_is_a_not_valid_string_number() {
-
-        var productId = 1L;
-
-        var product = generator.nextObject(Product.class);
-        product.setId(productId);
-
-        var offer = generator.nextObject(Offer.class);
-        offer.setProductId(productId);
-        offer.setPrice("priceError");
-
-        var sizeList = generator.objects(Size.class,5).collect(Collectors.toList());
-        sizeList.forEach(size -> {
-            size.setProductId(productId);
-            size.setAvailability(Boolean.FALSE);
-        });
-
-        when(productRepository.findProductById(anyLong()))
-            .thenReturn(product);
-        when(offerRepository.findOfferByProductId(anyLong(), any(LocalDateTime.class)))
-            .thenReturn(offer);
-        when(sizeRepository.findSizeAvailableByProductId(anyLong())).thenReturn(sizeList);
-
-        var result = productService.getProductDetailByProductId(productId);
-
-        assertNotNull(result, "Result should be not null");
-        assertTrue(result.isEmpty(), "Result should be empty");
-    }
-
-    @Test
-    @Feature("Find product details")
-    @Story("Shall return product detail data")
     void should_return_product_detail_data_when_get_product_detail_by_product_id_and_there_are_not_availability() {
 
         var productId = 1L;
@@ -192,7 +160,6 @@ class ProductServiceTest {
 
         var offer = generator.nextObject(Offer.class);
         offer.setProductId(productId);
-        offer.setPrice("200.0");
 
         var sizeList = generator.objects(Size.class,5).collect(Collectors.toList());
         sizeList.forEach(size -> {
@@ -233,7 +200,6 @@ class ProductServiceTest {
 
         var offer = generator.nextObject(Offer.class);
         offer.setProductId(productId);
-        offer.setPrice("200.0");
 
         var sizeList = generator.objects(Size.class,5).collect(Collectors.toList());
         sizeList.forEach(size -> {
