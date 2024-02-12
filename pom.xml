@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.inditex</groupId>
-	<artifactId>zarachallenge</artifactId>
+	<artifactId>zch</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<name>Zara challenge</name>
 	<description>Zara challenge description</description>
@@ -278,7 +278,7 @@
 							<buildArgs>
 								<JAR_FILE>${project.artifactId}-${project.version}.jar</JAR_FILE>
 							</buildArgs>
-							<useMavenSettingsForAuth>false</useMavenSettingsForAuth>
+							<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
 						</configuration>
 					</plugin>
 				</plugins>
