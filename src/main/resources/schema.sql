@@ -1,11 +1,11 @@
 create table PRODUCT(
-  ID int not null AUTO_INCREMENT,
+  ID int not null,
   NAME varchar(100) not null,
   PRIMARY KEY ( ID )
 
 );
 create table OFFER(
-  ID int not null AUTO_INCREMENT,
+  ID int not null,
   VALID_FROM TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRICE numeric (5,2),
   PRODUCT_ID  int not null,
@@ -16,7 +16,7 @@ create table OFFER(
 );
 
 create table SIZE(
-  SIZE_ID INT not null AUTO_INCREMENT,
+  SIZE_ID INT not null,
   SIZE varchar(1) not null,
   AVAILABILITY boolean,
   LAST_UPDATED TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

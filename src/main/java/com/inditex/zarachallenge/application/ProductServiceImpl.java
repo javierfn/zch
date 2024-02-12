@@ -1,9 +1,7 @@
 package com.inditex.zarachallenge.application;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.inditex.zarachallenge.domain.model.Product;
@@ -40,10 +38,10 @@ public class ProductServiceImpl implements ProductService {
 		try {
 			var product = productRepository.findProductById(productId);
 			var offer = offerRepository.findOfferByProductId(productId, LocalDateTime.now());
-			var availability = !sizeRepository.findSizeAvailableByProductId(productId)
+			var availability = !sizeRepository.findSizeListByProductId(productId)
 									.stream()
 									.filter(size -> Boolean.TRUE.equals(size.getAvailability()))
-									.collect(Collectors.toList())
+									.toList()
 									.isEmpty();
 
 			var productDetail = ProductDetail.builder()

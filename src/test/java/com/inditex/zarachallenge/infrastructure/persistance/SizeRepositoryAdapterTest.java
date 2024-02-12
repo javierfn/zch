@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -55,7 +54,7 @@ class SizeRepositoryAdapterTest {
     void should_throw_null_pointer_exception_when_find_size_available_by_product_id_and_product_id_is_null() {
         //noinspection DataFlowIssue
         assertThrows(NullPointerException.class,
-            () -> sizeRepositoryAdapter.findSizeAvailableByProductId(null),
+            () -> sizeRepositoryAdapter.findSizeListByProductId(null),
             "Should throw null pointer exception");
     }
 
@@ -67,11 +66,11 @@ class SizeRepositoryAdapterTest {
         var productId = 1L;
 
         when(sizeRepositoryJpa
-            .findByProductIdAndAvailabilityOrderBySizeAsc(anyLong(), anyBoolean()))
+            .findByProductIdOrderBySizeAsc(anyLong()))
             .thenReturn(Collections.emptyList());
 
         assertThrows(SizeNotFoundException.class,
-            () -> sizeRepositoryAdapter.findSizeAvailableByProductId(productId),
+            () -> sizeRepositoryAdapter.findSizeListByProductId(productId),
             "Should throw size not found exception");
     }
 
@@ -86,10 +85,10 @@ class SizeRepositoryAdapterTest {
         sizeEntityList.forEach( entity -> entity.setProductId(productId));
 
         when(sizeRepositoryJpa
-            .findByProductIdAndAvailabilityOrderBySizeAsc(anyLong(), anyBoolean()))
+            .findByProductIdOrderBySizeAsc(anyLong()))
             .thenReturn(sizeEntityList);
 
-        var result = sizeRepositoryAdapter.findSizeAvailableByProductId(productId);
+        var result = sizeRepositoryAdapter.findSizeListByProductId(productId);
 
         assertNotNull(result, "The result should not be null");
         assertAll(

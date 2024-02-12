@@ -40,7 +40,7 @@ public class OfferEntity implements Serializable {
   @Column(name = "VALID_FROM", nullable = false)
   private LocalDateTime validFrom;
 
-  @Column(name = "PRICE", nullable = false)
+  @Column(name = "PRICE")
   private BigDecimal price;
 
   @Column(name = "PRODUCT_ID", nullable = false)

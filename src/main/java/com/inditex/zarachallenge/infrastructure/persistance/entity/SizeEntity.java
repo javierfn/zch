@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "SIZE")
+@Table(name = "\"SIZE\"")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
@@ -36,13 +36,13 @@ public class SizeEntity implements Serializable {
       })
   private Long sizeId;
 
-  @Column(name = "SIZE", length = 5, nullable = false)
+  @Column(name = "\"SIZE\"", length = 5, nullable = false)
   private String size;
 
-  @Column(name = "AVAILABILITY", nullable = false)
+  @Column(name = "AVAILABILITY")
   private Boolean availability;
 
-  @Column(name = "LAST_UPDATED", nullable = false)
+  @Column(name = "LAST_UPDATED")
   private LocalDateTime lastUpdated;
 
   @Column(name = "PRODUCT_ID", nullable = false)

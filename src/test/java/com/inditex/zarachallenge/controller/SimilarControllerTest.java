@@ -106,7 +106,7 @@ class SimilarControllerTest {
 
         var productId = "1";
 
-        var productDetailList = generator.objects(ProductDetail.class,5)
+        var productDetailList = generator.objects(ProductDetail.class,3)
             .collect(Collectors.toList());
 
         when(similarProductService.findSimilarProductsByProductId(anyLong()))
@@ -123,6 +123,27 @@ class SimilarControllerTest {
         assertEquals(productDetailList.size(),
             result.getBody().size(),
             "Result set size should be equals");
+
+        var resultIterator = result.getBody().iterator();
+
+        var firstElement = resultIterator.next();
+
+        assertEquals(productDetailList.get(0).getId().toString(),
+                firstElement.getId(),
+                "First element Id should be equals");
+
+        var secondElement = resultIterator.next();
+
+        assertEquals(productDetailList.get(1).getId().toString(),
+            secondElement.getId(),
+            "Second element Id should be equals");
+
+        var thirdElement = resultIterator.next();
+
+        assertEquals(productDetailList.get(2).getId().toString(),
+            thirdElement.getId(),
+            "Third element Id should be equals");
+
     }
 
 }

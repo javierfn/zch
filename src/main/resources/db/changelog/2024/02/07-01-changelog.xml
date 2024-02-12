@@ -13,18 +13,4 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="1744301580-2" author="javierfn">
-        <createTable tableName="PRODUCT" tablespace="DATA">
-            <column name="ID" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PRODUCT_PK" primaryKeyTablespace="INDEX" notNullConstraintName="PRODUCT_ID_NN"/>
-            </column>
-            <column name="NAME" type="VARCHAR(100)">
-                <constraints nullable="false" notNullConstraintName="PRODUCT_NAME_NN"/>
-            </column>
-        </createTable>
-        <rollback>
-            <dropTable tableName="PRODUCT"/>
-        </rollback>
-    </changeSet>
-
 </databaseChangeLog>

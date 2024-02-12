@@ -9,6 +9,6 @@ import com.inditex.zarachallenge.domain.model.Size;
 
 public interface SizeRepository {
 
-  List<Size> findSizeAvailableByProductId(final Long productId);
+  List<Size> findSizeListByProductId(final Long productId);
 
 }

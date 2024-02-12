@@ -1,6 +1,7 @@
 package com.inditex.zarachallenge.controller;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ public class SimilarController implements SimilarControllerInterface {
   @Override
   public ResponseEntity<Set<ProductDetailDTO>> productProductIdSimilarGet(String productId) {
      return ResponseEntity.ok(
-         new HashSet<>(
+         new LinkedHashSet<>(
              productDetailMapper.toDto(
                  similarProductService.findSimilarProductsByProductId(Long.valueOf(productId))
              )

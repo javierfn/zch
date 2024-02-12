@@ -7,6 +7,6 @@ import com.inditex.zarachallenge.infrastructure.persistance.entity.SizeEntity;
 
 public interface SizeRepositoryJpa extends JpaRepository<SizeEntity, Long> {
 
-  List<SizeEntity> findByProductIdAndAvailabilityOrderBySizeAsc(Long productId, Boolean availability);
+  List<SizeEntity> findByProductIdOrderBySizeAsc(Long productId);
 
 }

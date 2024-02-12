@@ -26,10 +26,9 @@ public class SizeRepositoryAdapter implements SizeRepository {
 	private final SizeMapper sizeMapper;
 
 	@Override
-	public List<Size> findSizeAvailableByProductId(@NonNull final Long productId) {
+	public List<Size> findSizeListByProductId(@NonNull final Long productId) {
 
-		var sizeEntityList = sizeRepositoryJpa
-				.findByProductIdAndAvailabilityOrderBySizeAsc(productId, Boolean.TRUE);
+		var sizeEntityList = sizeRepositoryJpa.findByProductIdOrderBySizeAsc(productId);
 
 		if ( sizeEntityList.isEmpty()) {
 			log.error(NO_SE_HA_ENCONTRADO_SIZE_PARA_EL_PRODUCT_ID, productId);

@@ -139,7 +139,7 @@ class ProductServiceTest {
             .thenReturn(product);
         when(offerRepository.findOfferByProductId(anyLong(), any(LocalDateTime.class)))
             .thenReturn(offer);
-        when(sizeRepository.findSizeAvailableByProductId(anyLong()))
+        when(sizeRepository.findSizeListByProductId(anyLong()))
             .thenThrow(new SizeNotFoundException());
 
         var result = productService.getProductDetailByProductId(productId);
@@ -171,7 +171,7 @@ class ProductServiceTest {
             .thenReturn(product);
         when(offerRepository.findOfferByProductId(anyLong(), any(LocalDateTime.class)))
             .thenReturn(offer);
-        when(sizeRepository.findSizeAvailableByProductId(anyLong())).thenReturn(sizeList);
+        when(sizeRepository.findSizeListByProductId(anyLong())).thenReturn(sizeList);
 
         var result = productService.getProductDetailByProductId(productId);
 
@@ -183,7 +183,7 @@ class ProductServiceTest {
         assertAll(
             () -> assertEquals(productId, resultProductDetail.getId(), "Id should be equals"),
             () -> assertEquals(product.getName(), resultProductDetail.getName(), "Name should be equals"),
-            () -> assertEquals(offer.getPrice(), resultProductDetail.getPrice().toString(), "Price should be equals"),
+            () -> assertEquals(offer.getPrice(), resultProductDetail.getPrice(), "Price should be equals"),
             () -> assertEquals(Boolean.FALSE, resultProductDetail.getAvailability(), "Availability should be false")
         );
     }
@@ -211,7 +211,7 @@ class ProductServiceTest {
             .thenReturn(product);
         when(offerRepository.findOfferByProductId(anyLong(), any(LocalDateTime.class)))
             .thenReturn(offer);
-        when(sizeRepository.findSizeAvailableByProductId(anyLong())).thenReturn(sizeList);
+        when(sizeRepository.findSizeListByProductId(anyLong())).thenReturn(sizeList);
 
         var result = productService.getProductDetailByProductId(productId);
 
@@ -223,7 +223,7 @@ class ProductServiceTest {
         assertAll(
             () -> assertEquals(productId, resultProductDetail.getId(), "Id should be equals"),
             () -> assertEquals(product.getName(), resultProductDetail.getName(), "Name should be equals"),
-            () -> assertEquals(offer.getPrice(), resultProductDetail.getPrice().toString(), "Price should be equals"),
+            () -> assertEquals(offer.getPrice(), resultProductDetail.getPrice(), "Price should be equals"),
             () -> assertEquals(Boolean.TRUE, resultProductDetail.getAvailability(), "Availability should be true")
         );
     }

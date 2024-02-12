@@ -20,9 +20,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import com.inditex.zarachallenge.domain.exception.SimilarProductsConnectionErrorException;
 import com.inditex.zarachallenge.domain.exception.SimilarProductsErrorException;
+import com.inditex.zarachallenge.domain.exception.SimilarProductsNotFoundException;
 import com.inditex.zarachallenge.infrastructure.rest.similarProductEngineAPI.client.DefaultClientApi;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -31,21 +33,21 @@ import io.qameta.allure.Story;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @Epic("Similar product management")
-class SimilarProductEngineApiRepositoryTest {
+class SimilarProductEngineApiAdapterTest {
 
     EasyRandom generator;
 
     @Mock
     DefaultClientApi similarProductEngineClientApi;
 
-    SimilarProductEngineApiRepository similarProductEngineApiAdapter;
+    SimilarProductEngineApiAdapter similarProductEngineApiAdapter;
 
     @BeforeEach
     void setup() {
         generator = new EasyRandom();
 
         similarProductEngineApiAdapter =
-            new SimilarProductEngineApiRepository(similarProductEngineClientApi);
+            new SimilarProductEngineApiAdapter(similarProductEngineClientApi);
     }
 
     @Test
@@ -56,6 +58,21 @@ class SimilarProductEngineApiRepositoryTest {
         assertThrows(NullPointerException.class,
             () -> similarProductEngineApiAdapter.findSimilarProductsByProductId(null),
             "Should throw null pointer exception");
+    }
+
+    @Test
+    @Feature("Find similar products in api")
+    @Story("Shall return error")
+    void should_throw_similar_products_connection_error_exception_when_find_similar_products_by_product_id_and_api_throw_HttpClientErrorException_with_404_not_found_code() {
+
+        var productId = 1L;
+
+        when(similarProductEngineClientApi.getProductSimilaridsWithHttpInfo(anyString()))
+            .thenThrow(new HttpClientErrorException(org.springframework.http.HttpStatusCode.valueOf(404)));
+
+        assertThrows(SimilarProductsNotFoundException.class,
+            () -> similarProductEngineApiAdapter.findSimilarProductsByProductId(productId),
+            "Should throw similar products not found exception");
     }
 
     @Test
@@ -86,6 +103,68 @@ class SimilarProductEngineApiRepositoryTest {
         assertThrows(SimilarProductsErrorException.class,
             () -> similarProductEngineApiAdapter.findSimilarProductsByProductId(productId),
             "Should throw similar products error exception");
+    }
+
+    @Test
+    @Feature("Find similar products in api")
+    @Story("Shall return error")
+    void should_throw_similar_products_not_found_exception_when_find_similar_products_by_product_id_and_api_return_http_404_not_found() {
+
+        var productId = 1L;
+
+        when(similarProductEngineClientApi.getProductSimilaridsWithHttpInfo(anyString()))
+            .thenReturn(ResponseEntity.notFound().build());
+
+        assertThrows(SimilarProductsNotFoundException.class,
+            () -> similarProductEngineApiAdapter.findSimilarProductsByProductId(productId),
+            "Should throw similar products not found exception");
+    }
+
+    @Test
+    @Feature("Find similar products in api")
+    @Story("Shall return error")
+    void should_throw_similar_products_error_exception_when_find_similar_products_by_product_id_and_api_return_not_http_200_1() {
+
+        var productId = 1L;
+
+        when(similarProductEngineClientApi.getProductSimilaridsWithHttpInfo(anyString()))
+            .thenReturn(ResponseEntity.badRequest().build());
+
+        assertThrows(SimilarProductsErrorException.class,
+            () -> similarProductEngineApiAdapter.findSimilarProductsByProductId(productId),
+            "Should throw similar products error exception");
+    }
+
+    @Test
+    @Feature("Find similar products in api")
+    @Story("Shall return error")
+    void should_throw_similar_products_error_exception_when_find_similar_products_by_product_id_and_api_return_not_http_200_2() {
+
+        var productId = 1L;
+
+        when(similarProductEngineClientApi.getProductSimilaridsWithHttpInfo(anyString()))
+            .thenReturn(ResponseEntity.internalServerError().build());
+
+        assertThrows(SimilarProductsErrorException.class,
+            () -> similarProductEngineApiAdapter.findSimilarProductsByProductId(productId),
+            "Should throw similar products error exception");
+    }
+
+    @Test
+    @Feature("Find similar products in api")
+    @Story("Shall return error")
+    void should_throw_similar_products_not_exception_when_find_similar_products_by_product_id_and_api_return_an_empty_list() {
+
+        var productId = 1L;
+
+        Set<String> similarProductsIdList = new HashSet<>();
+
+        when(similarProductEngineClientApi.getProductSimilaridsWithHttpInfo(anyString()))
+            .thenReturn(ResponseEntity.ok(similarProductsIdList));
+
+        assertThrows(SimilarProductsNotFoundException.class,
+            () -> similarProductEngineApiAdapter.findSimilarProductsByProductId(productId),
+            "Should throw similar products not found exception");
     }
 
     @Test
