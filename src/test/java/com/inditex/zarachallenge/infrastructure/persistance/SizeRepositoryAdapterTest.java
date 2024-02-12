@@ -5,10 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -51,7 +56,7 @@ class SizeRepositoryAdapterTest {
     @Test
     @Feature("Find size")
     @Story("Shall return error")
-    void should_throw_null_pointer_exception_when_find_size_available_by_product_id_and_product_id_is_null() {
+    void should_throw_null_pointer_exception_when_findSizeListByProductId_and_product_id_is_null() {
         //noinspection DataFlowIssue
         assertThrows(NullPointerException.class,
             () -> sizeRepositoryAdapter.findSizeListByProductId(null),
@@ -61,7 +66,7 @@ class SizeRepositoryAdapterTest {
     @Test
     @Feature("Find size")
     @Story("Shall return error")
-    void should_throw_size_not_found_exception_when_find_size_available_by_product_id_and_there_are_not_size_that_match() {
+    void should_throw_size_not_found_exception_when_findSizeListByProductId_and_there_are_not_size_that_match() {
 
         var productId = 1L;
 
@@ -77,7 +82,7 @@ class SizeRepositoryAdapterTest {
     @Test
     @Feature("Find size")
     @Story("Shall return size data that match")
-    void should_return_size_data_when_find_size_available_by_product_id_and_there_are_size_that_match() {
+    void should_return_size_data_when_findSizeListByProductId_and_there_are_size_that_match() {
 
         var productId = 1L;
 
@@ -108,6 +113,85 @@ class SizeRepositoryAdapterTest {
 
         );
 
+    }
+
+    @Test
+    @Feature("Update size")
+    @Story("Shall return error")
+    void should_throw_null_pointer_exception_when_updateAvailability_and_size_id_is_null() {
+
+        var availability = Boolean.TRUE;
+        var update = Timestamp.valueOf(LocalDateTime.now());
+
+        assertThrows(NullPointerException.class,
+            () -> sizeRepositoryAdapter.updateAvailability(null, availability, update),
+            "Should throw null pointer exception");
+    }
+
+    @Test
+    @Feature("Update size")
+    @Story("Shall return error")
+    void should_throw_null_pointer_exception_when_updateAvailability_and_availability_is_null() {
+
+        var sizeId = 1L;
+        var update = Timestamp.valueOf(LocalDateTime.now());
+
+        assertThrows(NullPointerException.class,
+            () -> sizeRepositoryAdapter.updateAvailability(sizeId, null, update),
+            "Should throw null pointer exception");
+    }
+
+    @Test
+    @Feature("Update size")
+    @Story("Shall return error")
+    void should_throw_null_pointer_exception_when_updateAvailability_and_update_is_null() {
+
+        var sizeId = 1L;
+        var availability = Boolean.TRUE;
+
+        assertThrows(NullPointerException.class,
+            () -> sizeRepositoryAdapter.updateAvailability(sizeId, availability, null),
+            "Should throw null pointer exception");
+    }
+
+    @Test
+    @Feature("Update size")
+    @Story("Shall return error")
+    void should_throw_size_not_found_exception_when_updateAvailability_and_size_id_not_found() {
+
+        var sizeId = 1L;
+        var availability = Boolean.TRUE;
+        var update = Timestamp.valueOf(LocalDateTime.now());
+
+        when(sizeRepositoryJpa.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(SizeNotFoundException.class,
+            () -> sizeRepositoryAdapter.updateAvailability(sizeId, availability, update),
+            "Should throw size not found exception");
+    }
+
+    @Test
+    @Feature("Update size")
+    @Story("Shall update size data")
+    void should_update_size_availability_data_when_updateAvailability() {
+
+        var sizeId = 1L;
+        var availability = Boolean.TRUE;
+        var update = Timestamp.valueOf(LocalDateTime.now());
+
+        var sizeEntity = generator.nextObject(SizeEntity.class);
+        sizeEntity.setSizeId(sizeId);
+        sizeEntity.setAvailability(Boolean.FALSE);
+
+        when(sizeRepositoryJpa.findById(anyLong())).thenReturn(Optional.of(sizeEntity));
+        when(sizeRepositoryJpa.save(any(SizeEntity.class))).thenReturn(sizeEntity);
+
+        var result = sizeRepositoryAdapter.updateAvailability(sizeId, availability, update);
+
+        assertNotNull(result, "Result should be not null");
+        assertEquals(sizeId, result.getSizeId(), "Size id should be equals");
+        assertTrue(result.getAvailability(), "Availability should be true");
+        assertEquals(update.toLocalDateTime(), result.getLastUpdated(), "LastUpdated should be equals");
     }
 
 }

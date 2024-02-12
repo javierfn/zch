@@ -29,7 +29,7 @@ import io.qameta.allure.Story;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @Epic("Similar product management")
-class SimilarProductServiceTest {
+class SimilarProductServiceImplTest {
 
     EasyRandom generator;
 
