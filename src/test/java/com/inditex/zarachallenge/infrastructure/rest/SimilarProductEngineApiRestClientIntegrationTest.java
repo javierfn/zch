@@ -63,7 +63,7 @@ class SimilarProductEngineApiRestClientIntegrationTest {
     @Test
     @Feature("Find similar products in api")
     @Story("Shall return similar product id that match")
-    void should_retun_a_list_when_getSimilarProductsIds_and_api_return_a_valid_product_id_list() {
+    void should_return_a_list_when_getSimilarProductsIds_and_api_return_a_valid_product_id_list() {
 
         var productId = 1L;
 
