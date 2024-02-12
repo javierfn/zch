@@ -3,10 +3,13 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>com.inditex</groupId>
 	<artifactId>zarachallenge</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>Zara challenge</name>
+	<description>Zara challenge description</description>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -253,7 +256,7 @@
 									<goal>push</goal>
 								</goals>
 								<configuration>
-									<tag>${project.parent.version}</tag>
+									<tag>${project.version}</tag>
 								</configuration>
 							</execution>
 							<execution>
@@ -271,11 +274,11 @@
 						</executions>
 						<configuration>
 							<dockerfile>Dockerfile</dockerfile>
-							<repository>registry.hub.docker.com/javierfn/${project.parent.artifactId}</repository>
+							<repository>registry.hub.docker.com/javierfn/${project.artifactId}</repository>
 							<buildArgs>
-								<JAR_FILE>${project.parent.artifactId}-${project.parent.version}.jar</JAR_FILE>
+								<JAR_FILE>${project.artifactId}-${project.version}.jar</JAR_FILE>
 							</buildArgs>
-							<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+							<useMavenSettingsForAuth>false</useMavenSettingsForAuth>
 						</configuration>
 					</plugin>
 				</plugins>
