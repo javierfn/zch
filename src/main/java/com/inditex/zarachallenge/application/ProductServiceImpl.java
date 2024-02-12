@@ -1,7 +1,9 @@
 package com.inditex.zarachallenge.application;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.inditex.zarachallenge.domain.model.Product;
@@ -15,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 @Transactional
 public class ProductServiceImpl implements ProductService {
 
@@ -24,6 +25,16 @@ public class ProductServiceImpl implements ProductService {
 	private final OfferRepository offerRepository;
 
 	private final SizeRepository sizeRepository;
+
+	private final String date;
+
+	public ProductServiceImpl(ProductRepository productRepository, OfferRepository offerRepository,
+			SizeRepository sizeRepository, @Value("${date}") String date) {
+		this.productRepository = productRepository;
+		this.offerRepository = offerRepository;
+		this.sizeRepository = sizeRepository;
+		this.date = date;
+	}
 
 	@Override
 	public Product findProductById(final Long productId) {
@@ -37,7 +48,9 @@ public class ProductServiceImpl implements ProductService {
 
 		try {
 			var product = productRepository.findProductById(productId);
-			var offer = offerRepository.findOfferByProductId(productId, LocalDateTime.now());
+			var offer = offerRepository.findOfferByProductId(productId,
+					LocalDateTime.parse(date,
+							DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")));
 			var availability = !sizeRepository.findSizeListByProductId(productId)
 									.stream()
 									.filter(size -> Boolean.TRUE.equals(size.getAvailability()))
