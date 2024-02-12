@@ -20,6 +20,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.inditex.zarachallenge.domain.exception.OfferNotFoundException;
@@ -42,21 +43,24 @@ class ProductServiceImplTest {
 
     EasyRandom generator;
 
-    @Spy
+    @Mock
     ProductRepository productRepository;
 
-    @Spy
+    @Mock
     OfferRepository offerRepository;
 
-    @Spy
+    @Mock
     SizeRepository sizeRepository;
 
-    @InjectMocks
     ProductServiceImpl productService;
 
     @BeforeEach
     void setup() {
         generator = new EasyRandom();
+
+        productService = new ProductServiceImpl(productRepository,
+            offerRepository,
+            sizeRepository, "2023-11-24T12:40:01.773Z");
     }
 
     @Test
