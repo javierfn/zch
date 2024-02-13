@@ -6,7 +6,7 @@
 
 	<groupId>com.inditex</groupId>
 	<artifactId>zch</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>Zara challenge</name>
 	<description>Zara challenge description</description>
 
