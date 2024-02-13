@@ -6,7 +6,7 @@
 
 	<groupId>com.inditex</groupId>
 	<artifactId>zch</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>Zara challenge</name>
 	<description>Zara challenge description</description>
 
@@ -30,7 +30,6 @@
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<easy.random.version>5.0.0</easy.random.version>
 		<allure-junit5.version>2.25.0</allure-junit5.version>
-		<dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -162,7 +161,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -231,59 +230,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>build-docker-image</id>
-			<activation>
-				<property>
-					<name>build.docker.image</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>com.spotify</groupId>
-						<artifactId>dockerfile-maven-plugin</artifactId>
-						<version>${dockerfile-maven-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>build-image-tag-version</id>
-								<phase>package</phase>
-								<goals>
-									<goal>build</goal>
-									<goal>tag</goal>
-									<goal>push</goal>
-								</goals>
-								<configuration>
-									<tag>${project.version}</tag>
-								</configuration>
-							</execution>
-							<execution>
-								<id>build-image-tag-latest</id>
-								<phase>package</phase>
-								<goals>
-									<goal>build</goal>
-									<goal>tag</goal>
-									<goal>push</goal>
-								</goals>
-								<configuration>
-									<tag>latest</tag>
-								</configuration>
-							</execution>
-						</executions>
-						<configuration>
-							<dockerfile>Dockerfile</dockerfile>
-							<repository>registry.hub.docker.com/javierfn/${project.artifactId}</repository>
-							<buildArgs>
-								<JAR_FILE>${project.artifactId}-${project.version}.jar</JAR_FILE>
-							</buildArgs>
-							<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 </project>

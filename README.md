@@ -63,10 +63,10 @@ mvn spring-boot:run -Dspring-boot.run.profiles=custom
 
 ## Generate docker image and push to repository
 
-You can generate it using the following command:
+You can generate it using the following command inside the app directory of the project:
 
 ```bash
-mvn clean package install -Dbuild.docker.image=true
+docker build -t zch --build-arg JAR_FILE=zch.jar . 
 ```
 
 ## Run the project with the docker image
