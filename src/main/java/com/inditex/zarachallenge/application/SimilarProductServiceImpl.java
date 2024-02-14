@@ -28,9 +28,7 @@ public class SimilarProductServiceImpl implements SimilarProductService {
 
 		var result = new ArrayList<ProductDetail>();
 
-		similarProductIdList.forEach(similarProductId -> {
-			productService.getProductDetailByProductId(similarProductId).map(result::add);
-		});
+		similarProductIdList.forEach(similarProductId -> productService.getProductDetailByProductId(similarProductId).map(result::add));
 
 		return result;
 	}

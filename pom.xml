@@ -6,7 +6,7 @@
 
 	<groupId>com.inditex</groupId>
 	<artifactId>zch</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<name>Zara challenge</name>
 	<description>Zara challenge description</description>
 
@@ -162,6 +162,15 @@
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>0.8.11</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -193,9 +202,9 @@
 						</goals>
 						<configuration>
 							<inputSpec>${project.basedir}/src/main/resources/similarProducts.yaml</inputSpec>
-							<apiPackage>${project.groupId}.${project.artifactId}.controller</apiPackage>
-							<modelPackage>${project.groupId}.${project.artifactId}.infrastructure.dto</modelPackage>
-							<invokerPackage>${project.groupId}.${project.artifactId}.infrastructure.invoker</invokerPackage>
+							<apiPackage>com.inditex.zarachallenge.controller</apiPackage>
+							<modelPackage>com.inditex.zarachallenge.infrastructure.dto</modelPackage>
+							<invokerPackage>com.inditex.zarachallenge.infrastructure.invoker</invokerPackage>
 							<skipValidateSpec>false</skipValidateSpec>
 							<generateSupportingFiles>false</generateSupportingFiles>
 							<output>${project.basedir}</output>
@@ -228,7 +237,57 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>com.inditex.zarachallenge.controller.SimilarControllerInterface.class</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>dependency-check</id>
+			<activation>
+				<property>
+					<name>dependency.check</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.owasp</groupId>
+						<artifactId>dependency-check-maven</artifactId>
+						<version>9.0.9</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>check</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

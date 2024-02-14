@@ -19,6 +19,7 @@ public class KafkaListener {
 	private final SizeService sizeService;
 
 	@Bean
+	@SuppressWarnings("java:S100")
 	public Consumer<Message<ProductAvailabilityEvent>> KafkaConsumer() {
 		return message -> {
 			log.info(message.getHeaders().toString());

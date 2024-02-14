@@ -1,6 +1,5 @@
 package com.inditex.zarachallenge.controller;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.springframework.http.ResponseEntity;
