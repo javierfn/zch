@@ -55,7 +55,7 @@ public class ZaraInitialConfig implements CommandLineRunner {
 			List<ProductAvailabilityEvent> stocks = Files
 					.readAllLines(ResourceUtils.getFile(resourceFile.getURL()).toPath()).stream()
 					.map(line -> convertStock(Arrays.asList(line.trim().split(",")))).toList();
-			stocks.forEach(stock -> consumer.accept(new GenericMessage<ProductAvailabilityEvent>(stock)));
+			stocks.forEach(stock -> consumer.accept(new GenericMessage<>(stock)));
 		} catch (Exception e) {
 			new Exception("Error in consumer");
 		}

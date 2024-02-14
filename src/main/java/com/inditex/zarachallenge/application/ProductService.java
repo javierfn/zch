@@ -1,6 +1,5 @@
 package com.inditex.zarachallenge.application;
 
-import java.util.List;
 import java.util.Optional;
 import com.inditex.zarachallenge.domain.model.Product;
 import com.inditex.zarachallenge.domain.model.ProductDetail;

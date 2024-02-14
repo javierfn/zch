@@ -18,6 +18,7 @@ public class Size {
 
   private Long sizeId;
 
+  @SuppressWarnings("java:S1700")
   private String size;
 
   private Boolean availability;
