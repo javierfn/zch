@@ -15,6 +15,8 @@ Project concept of a java backend to create an API using:
 - Maven (https://maven.apache.org/)
 - Multilanguage
 - Docker with Spring
+- Jacoco
+- OWASP Dependency Check (https://owasp.org/www-project-dependency-check/)
 
 ## Requirements
 
@@ -83,6 +85,14 @@ You can run it using the following command:
 
 ```bash
 mvn dependency-check:check
+```
+
+## Generate dependency owasp report
+
+You can run it using the following command:
+
+```bash
+mvn check
 ```
 
 ## Tests
