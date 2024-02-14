@@ -84,15 +84,7 @@ docker run -p 8080:8080 zch:latest
 You can run it using the following command:
 
 ```bash
-mvn dependency-check:check
-```
-
-## Generate dependency owasp report
-
-You can run it using the following command:
-
-```bash
-mvn check
+mvn dependency-check:check -Ddependency.check=true
 ```
 
 ## Tests
