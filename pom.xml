@@ -202,9 +202,9 @@
 						</goals>
 						<configuration>
 							<inputSpec>${project.basedir}/src/main/resources/similarProducts.yaml</inputSpec>
-							<apiPackage>${project.groupId}.${project.artifactId}.controller</apiPackage>
-							<modelPackage>${project.groupId}.${project.artifactId}.infrastructure.dto</modelPackage>
-							<invokerPackage>${project.groupId}.${project.artifactId}.infrastructure.invoker</invokerPackage>
+							<apiPackage>com.inditex.zarachallenge.controller</apiPackage>
+							<modelPackage>com.inditex.zarachallenge.infrastructure.dto</modelPackage>
+							<invokerPackage>com.inditex.zarachallenge.infrastructure.invoker</invokerPackage>
 							<skipValidateSpec>false</skipValidateSpec>
 							<generateSupportingFiles>false</generateSupportingFiles>
 							<output>${project.basedir}</output>
